@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JJ's Paper Company — A Better Way to Sell Paper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a14;
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --forest: #2d4a35;
+    --gold: #c4922a;
+    --gold-light: #e8b84b;
+    --muted: #7a7060;
+    --border: #ddd8cc;
+    --card-bg: #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--warm-white);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(250, 248, 244, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  .logo span { color: var(--gold); }
+
+  nav { display: flex; gap: 2.5rem; align-items: center; }
+
+  nav a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--forest);
+    color: #fff !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 2px;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--gold) !important; color: #fff !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -10%;
+    top: 10%;
+    width: 55%;
+    height: 80%;
+    background: radial-gradient(ellipse at center, rgba(196,146,42,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.8rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--forest);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--forest);
+    color: #fff;
+    padding: 0.9rem 2.2rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 2px;
+    transition: background 0.25s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: var(--gold); transform: translateY(-1px); }
+
+  .btn-ghost {
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    padding: 0.9rem 2.2rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 2px;
+    background: transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── HERO VISUAL ── */
+  .hero-visual {
+    position: relative;
+    animation: fadeSlideUp 0.9s ease 0.3s both;
+  }
+
+  .dashboard-mock {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+    overflow: hidden;
+    font-size: 0.78rem;
+  }
+
+  .mock-bar {
+    background: var(--ink);
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .mock-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .d1 { background: #ff5f57; }
+  .d2 { background: #ffbd2e; }
+  .d3 { background: #28c840; }
+
+  .mock-title {
+    color: rgba(255,255,255,0.5);
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  .mock-body { padding: 1.2rem; }
+
+  .mock-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mock-tab {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .mock-tab.active {
+    color: var(--forest);
+    border-bottom-color: var(--forest);
+    font-weight: 600;
+  }
+
+  .mock-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.45rem 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+  }
+
+  .mock-table { width: 100%; border-collapse: collapse; }
+
+  .mock-table th {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.35rem 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mock-table td {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.72rem;
+    border-bottom: 1px solid #f0ece4;
+    color: var(--ink);
+  }
+
+  .mock-table tr:last-child td { border-bottom: none; }
+
+  .stock-badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .in-stock { background: #e6f4ea; color: #1e6e35; }
+  .low-stock { background: #fff3e0; color: #b35a00; }
+
+  .mock-btn {
+    display: inline-block;
+    background: var(--forest);
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .mock-footer {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    padding: 0.7rem 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  .mock-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #1e6e35;
+    font-weight: 500;
+  }
+
+  .pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #28c840;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .floating-card {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    font-size: 0.72rem;
+  }
+
+  .floating-card.top-right {
+    top: -1.5rem;
+    right: -1.5rem;
+    width: 160px;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .floating-card.bottom-left {
+    bottom: -1.5rem;
+    left: -1.5rem;
+    width: 175px;
+    animation: float 3s ease-in-out infinite 1.5s;
+  }
+
+  .fc-label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .fc-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--forest);
+  }
+
+  .fc-sub { font-size: 0.62rem; color: var(--muted); margin-top: 0.2rem; }
+
+  .fc-bar {
+    margin-top: 0.5rem;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .fc-bar-fill { height: 100%; background: var(--gold); border-radius: 2px; }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--ink);
+    padding: 2.5rem 4rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    border-top: 3px solid var(--gold);
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.06em;
+  }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 6rem 4rem; }
+
+  .section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 1.5rem;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 540px;
+    margin-bottom: 3rem;
+  }
+
+  /* ── PAIN POINTS ── */
+  .pain-section {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .pain-left h2 { margin-bottom: 1.2rem; }
+
+  .pain-list { list-style: none; display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    border-left: 3px solid var(--gold);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .pain-item.visible { opacity: 1; transform: translateX(0); }
+
+  .pain-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+
+  .pain-text strong {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .pain-text p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── EMAIL VISUAL ── */
+  .email-mock {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+
+  .email-header {
+    background: var(--cream);
+    padding: 0.8rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .email-inbox-list { padding: 0; }
+
+  .email-row {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.2rem;
+    border-bottom: 1px solid #f0ece4;
+    gap: 0.8rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  .email-row:hover { background: var(--cream); }
+  .email-row.unread { font-weight: 600; }
+
+  .email-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .email-row.read .email-dot { background: transparent; }
+
+  .email-from { min-width: 100px; color: var(--ink); }
+  .email-subject { flex: 1; color: var(--muted); }
+  .email-time { color: var(--muted); font-size: 0.68rem; }
+
+  .email-tag {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.4rem;
+    background: #fff3e0;
+    color: #b35a00;
+    border-radius: 2px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .email-overload {
+    padding: 0.8rem 1.2rem;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-align: center;
+    border-top: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  .vs-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--gold);
+    margin: 1.5rem 0;
+    gap: 1rem;
+  }
+
+  .vs-arrow::before, .vs-arrow::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .feature-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.2s;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .feature-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s, transform 0.5s, box-shadow 0.25s;
+  }
+
+  .feature-card:hover {
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    transform: translateY(-3px);
+  }
+
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--forest);
+  }
+
+  .feature-card.gold-top::before { background: var(--gold); }
+
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .feature-card p {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { background: var(--forest); color: white; }
+
+  .how-section .section-label { color: var(--gold-light); }
+  .how-section .section-label::before { background: var(--gold-light); }
+  .how-section h2 { color: white; }
+  .how-section .section-sub { color: rgba(255,255,255,0.65); }
+
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+    margin-top: 1rem;
+  }
+
+  .how-steps::before {
+    content: '';
+    position: absolute;
+    top: 2.2rem;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: rgba(255,255,255,0.15);
+    z-index: 0;
+  }
+
+  .step {
+    text-align: center;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .step.visible { opacity: 1; transform: translateY(0); }
+
+  .step-num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 auto 1.2rem;
+    border: 3px solid var(--forest);
+    box-shadow: 0 0 0 2px var(--gold);
+  }
+
+  .step h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+
+  .step p { font-size: 0.8rem; color: rgba(255,255,255,0.6); line-height: 1.6; }
+
+  /* ── PORTAL PREVIEW ── */
+  .portal-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 6rem 4rem;
+  }
+
+  .portal-mock {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .portal-sidebar {
+    width: 180px;
+    float: left;
+    background: var(--ink);
+    min-height: 360px;
+    padding: 1.2rem 0;
+  }
+
+  .portal-content-area {
+    overflow: hidden;
+    padding: 1.2rem;
+    min-height: 360px;
+  }
+
+  .sidebar-logo {
+    padding: 0 1rem 1rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    color: white;
+    font-weight: 700;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 0.8rem;
+  }
+
+  .sidebar-logo span { color: var(--gold-light); }
+
+  .sidebar-item {
+    padding: 0.5rem 1rem;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .sidebar-item:hover, .sidebar-item.active {
+    background: rgba(255,255,255,0.07);
+    color: rgba(255,255,255,0.9);
+  }
+
+  .sidebar-item.active { color: var(--gold-light); }
+
+  .portal-heading {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.8rem;
+  }
+
+  .order-form { display: flex; flex-direction: column; gap: 0.6rem; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .form-field label {
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .form-field select, .form-field input {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.72rem;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .form-submit {
+    background: var(--forest);
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-top: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .mini-orders { margin-top: 0.8rem; }
+
+  .mini-order-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #f0ece4;
+    font-size: 0.68rem;
+  }
+
+  .order-status {
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+  }
+
+  .status-processing { background: #e3f0ff; color: #1550a8; }
+  .status-shipped { background: #e6f4ea; color: #1e6e35; }
+  .status-pending { background: #fff3e0; color: #b35a00; }
+
+  /* ── TESTIMONIAL ── */
+  .testimonial-section {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    padding: 5rem 4rem;
+  }
+
+  .testimonial-section blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    position: relative;
+  }
+
+  .testimonial-section blockquote::before {
+    content: '\201C';
+    font-size: 6rem;
+    color: var(--gold);
+    line-height: 0;
+    position: absolute;
+    top: 1.5rem;
+    left: -3rem;
+    opacity: 0.4;
+  }
+
+  .testimonial-section cite {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-style: normal;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── CTA ── */
+  .cta-section {
+    background: var(--ink);
+    text-align: center;
+    padding: 7rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 120%, rgba(196,146,42,0.18) 0%, transparent 65%);
+  }
+
+  .cta-section .section-label { justify-content: center; }
+  .cta-section .section-label::before { display: none; }
+  .cta-section h2 { color: white; text-align: center; }
+
+  .cta-section p {
+    color: rgba(255,255,255,0.6);
+    max-width: 520px;
+    margin: 1rem auto 2.5rem;
+    line-height: 1.75;
+  }
+
+  .cta-actions { display: flex; gap: 1rem; justify-content: center; }
+
+  .btn-light {
+    background: var(--gold);
+    color: white;
+    padding: 1rem 2.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 2px;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-light:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-outline {
+    border: 1.5px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.8);
+    padding: 1rem 2.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 2px;
+    background: transparent;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold-light); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #0f0f0a;
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.78rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  footer .logo { color: rgba(255,255,255,0.7); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .hero-content { animation: fadeSlideUp 0.8s ease both; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    header { padding: 1rem 2rem; }
+    nav { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 6rem 2rem 3rem; }
+    .hero-visual { display: none; }
+    .stats-strip { grid-template-columns: repeat(2,1fr); padding: 2rem; }
+    section, .portal-section { padding: 4rem 2rem; }
+    .pain-grid, .portal-section { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr 1fr; }
+    .how-steps::before { display: none; }
+    .cta-actions { flex-direction: column; align-items: center; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">JJ's Paper<span>.</span></div>
+  <nav>
+    <a href="#pain">The Challenge</a>
+    <a href="#features">The Solution</a>
+    <a href="#portal">Client Portal</a>
+    <a href="#how">How It Works</a>
+    <a href="#cta" class="nav-cta">Book a Demo</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-label">JJ's Paper Company</div>
+    <h1>Your sales channel<br>is <em>leaving money</em><br>on the table.</h1>
+    <p class="hero-sub">
+      When customers can only order by email, you're not running a business — you're running a mailbox. 
+      We built a smarter way: a live ordering portal that works around the clock, handles the details, 
+      and keeps your team focused on what matters.
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">See It In Action</a>
+      <a href="#features" class="btn-ghost">Explore Features</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="floating-card top-right">
+      <div class="fc-label">Orders Today</div>
+      <div class="fc-value">47</div>
+      <div class="fc-sub">↑ 12 from yesterday</div>
+      <div class="fc-bar"><div class="fc-bar-fill" style="width:74%"></div></div>
+    </div>
+
+    <div class="dashboard-mock">
+      <div class="mock-bar">
+        <div class="mock-dot d1"></div>
+        <div class="mock-dot d2"></div>
+        <div class="mock-dot d3"></div>
+        <span class="mock-title">JJ's Paper — Order Management</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-tabs">
+          <div class="mock-tab active">Inventory</div>
+          <div class="mock-tab">Active Orders</div>
+          <div class="mock-tab">Customers</div>
+          <div class="mock-tab">Reports</div>
+        </div>
+        <div class="mock-search">🔍 &nbsp;Search products by SKU, grade, or weight...</div>
+        <table class="mock-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Grade</th>
+              <th>Weight</th>
+              <th>Stock</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CLASSIC CREST®</td>
+              <td>Premium</td>
+              <td>24 lb Bond</td>
+              <td><span class="stock-badge in-stock">In Stock</span></td>
+              <td><span class="mock-btn">Order</span></td>
+            </tr>
+            <tr>
+              <td>Offset Matte</td>
+              <td>Standard</td>
+              <td>60 lb Text</td>
+              <td><span class="stock-badge in-stock">In Stock</span></td>
+              <td><span class="mock-btn">Order</span></td>
+            </tr>
+            <tr>
+              <td>Coated Gloss</td>
+              <td>Commercial</td>
+              <td>80 lb Cover</td>
+              <td><span class="stock-badge low-stock">Low Stock</span></td>
+              <td><span class="mock-btn">Order</span></td>
+            </tr>
+            <tr>
+              <td>Uncoated Book</td>
+              <td>Publishing</td>
+              <td>50 lb Offset</td>
+              <td><span class="stock-badge in-stock">In Stock</span></td>
+              <td><span class="mock-btn">Order</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mock-footer">
+        <div class="mock-status"><div class="pulse"></div> System Active</div>
+        <span>14 vendors · 286 SKUs · Updated 2 min ago</span>
+      </div>
+    </div>
+
+    <div class="floating-card bottom-left">
+      <div class="fc-label">Monthly Revenue</div>
+      <div class="fc-value">$148K</div>
+      <div class="fc-sub">+23% vs prior period</div>
+      <div class="fc-bar"><div class="fc-bar-fill" style="width:88%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-num">73%</div>
+    <div class="stat-label">of B2B buyers prefer self-service over sales reps</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3.4×</div>
+    <div class="stat-label">more orders processed with an online portal</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">48h</div>
+    <div class="stat-label">average email order response time — vs seconds online</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">$0</div>
+    <div class="stat-label">additional headcount needed to handle portal orders</div>
+  </div>
+</div>
+
+<!-- PAIN POINTS -->
+<section class="pain-section" id="pain">
+  <div class="pain-grid">
+    <div class="pain-left">
+      <div class="section-label">The Problem</div>
+      <h2>Running paper sales<br>through your inbox<br>isn't a system.</h2>
+      <p class="section-sub">
+        Email-based ordering creates delays, errors, and friction — for your customers, 
+        your team, and your bottom line. Here's what that's costing you every day.
+      </p>
+    </div>
+    <div class="pain-right">
+      <ul class="pain-list">
+        <li class="pain-item">
+          <div class="pain-icon">⏳</div>
+          <div class="pain-text">
+            <strong>Orders Stuck in Queues</strong>
+            <p>Customers are waiting hours — sometimes days — for confirmation on orders that should take seconds. Every delay is a relationship at risk.</p>
+          </div>
+        </li>
+        <li class="pain-item">
+          <div class="pain-icon">📋</div>
+          <div class="pain-text">
+            <strong>Manual Entry &amp; Human Error</strong>
+            <p>Rekeying email orders into your system introduces mistakes — wrong SKUs, wrong quantities, wrong delivery addresses.</p>
+          </div>
+        </li>
+        <li class="pain-item">
+          <div class="pain-icon">📉</div>
+          <div class="pain-text">
+            <strong>No Visibility for Your Customers</strong>
+            <p>Buyers can't see stock levels, track orders, or reorder past purchases without picking up the phone or writing another email.</p>
+          </div>
+        </li>
+        <li class="pain-item">
+          <div class="pain-icon">🔀</div>
+          <div class="pain-text">
+            <strong>Multi-Vendor Complexity Hidden from You</strong>
+            <p>Juggling Pixelle, Neenah, Lindenmeyr, Domtar, and your independent suppliers in separate conversations? That's expensive coordination overhead.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Email vs Portal Visual -->
+  <div style="margin-top: 4rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+    <div class="email-mock">
+      <div class="email-header">
+        📬 &nbsp;Inbox (34 unread) — <strong style="color: #b35a00;">Order requests pending</strong>
+      </div>
+      <div class="email-inbox-list">
+        <div class="email-row unread">
+          <div class="email-dot"></div>
+          <div class="email-from">Print Plus Co.</div>
+          <div class="email-subject">RE: RE: RE: Can we get 20 cartons 80lb text?</div>
+          <span class="email-tag">OVERDUE</span>
+          <div class="email-time">3 days ago</div>
+        </div>
+        <div class="email-row unread">
+          <div class="email-dot"></div>
+          <div class="email-from">City Bindery</div>
+          <div class="email-subject">Reorder — same as last time? Any stock left?</div>
+          <span class="email-tag">URGENT</span>
+          <div class="email-time">Yesterday</div>
+        </div>
+        <div class="email-row unread">
+          <div class="email-dot"></div>
+          <div class="email-from">Metro Publishers</div>
+          <div class="email-subject">Order #1088 — Wrong weight delivered again</div>
+          <span class="email-tag">ISSUE</span>
+          <div class="email-time">2 hrs ago</div>
+        </div>
+        <div class="email-row read">
+          <div class="email-dot"></div>
+          <div class="email-from">Sunrise Press</div>
+          <div class="email-subject">Following up on my quote request from last week...</div>
+          <div class="email-time">4 days ago</div>
+        </div>
+      </div>
+      <div class="email-overload">+ 30 more threads requiring manual response</div>
+    </div>
+    <div class="vs-arrow">This is not a sales channel. There's a better way.</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-label">The Solution</div>
+  <h2>A complete operations upgrade<br>for your paper business.</h2>
+  <p class="section-sub">
+    We replace the back-and-forth with a clean, centralized platform that handles ordering, 
+    inventory, and customer communication — without adding to your payroll.
+  </p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🛒</span>
+      <h3>Self-Service Order Portal</h3>
+      <p>Customers log in, browse your full catalog — sorted by grade, weight, finish, and supplier — and place orders on their own time. No phone tag, no back-and-forth.</p>
+    </div>
+    <div class="feature-card gold-top">
+      <span class="feature-icon">📦</span>
+      <h3>Live Inventory Sync</h3>
+      <p>Real-time stock visibility pulled from your supplier relationships — Pixelle, Neenah, Midland, Lindenmeyr, Domtar, and more — consolidated into one clean interface.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔁</span>
+      <h3>Automated Reorder Workflows</h3>
+      <p>When a customer's order pattern is established, the system can surface reorder suggestions, approve standard orders, and route them to the right vendor — hands-free.</p>
+    </div>
+    <div class="feature-card gold-top">
+      <span class="feature-icon">📊</span>
+      <h3>Order Tracking &amp; History</h3>
+      <p>Customers see their full order history, delivery status, and downloadable invoices in their dashboard. Your team spends less time answering "Where's my order?"</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">💬</span>
+      <h3>Smart Quote Engine</h3>
+      <p>Customers request custom quotes directly in the portal. The system pre-fills known pricing parameters and routes exceptions to your team for final approval.</p>
+    </div>
+    <div class="feature-card gold-top">
+      <span class="feature-icon">📈</span>
+      <h3>Sales &amp; Demand Reporting</h3>
+      <p>See what's selling, who's buying, and which product lines need attention — all in one dashboard designed for a paper distributor's actual workflow.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="section-label">The Process</div>
+  <h2>From inbox chaos to<br>automated order flow.</h2>
+  <p class="section-sub">
+    Getting your team operational on the new platform takes weeks, not months. 
+    Here's exactly how it happens.
+  </p>
+
+  <div class="how-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Discovery &amp; Mapping</h4>
+      <p>We map your current vendor relationships, product catalog, and order workflows to build a platform shaped around your operation — not a generic template.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Catalog Build &amp; Integration</h4>
+      <p>Your full inventory — across all suppliers — is imported, organized, and connected to live pricing feeds where available. Your customers see exactly what you want them to see.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Portal Launch &amp; Onboarding</h4>
+      <p>Customers receive a portal login and a short walkthrough. Most place their first self-service order within 24 hours. No friction, no confusion.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Automated &amp; Optimized</h4>
+      <p>As order patterns develop, the system gets smarter. Routine orders move without intervention. Your team handles exceptions. That's the goal.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PORTAL PREVIEW -->
+<div class="portal-section" id="portal">
+  <div>
+    <div class="section-label">Client Portal</div>
+    <h2>What your customers<br>will actually see.</h2>
+    <p class="section-sub">
+      A clean, branded portal where buyers can place orders, track shipments, browse your catalog, 
+      and manage their account — at midnight or midday, without needing anyone on your end.
+    </p>
+    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem;">
+      <li style="font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; color: var(--muted);">
+        <span style="color: var(--forest); font-size: 1rem;">✓</span> Branded with your logo and color palette
+      </li>
+      <li style="font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; color: var(--muted);">
+        <span style="color: var(--forest); font-size: 1rem;">✓</span> Customer-specific pricing and product visibility
+      </li>
+      <li style="font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; color: var(--muted);">
+        <span style="color: var(--forest); font-size: 1rem;">✓</span> One-click reorder from purchase history
+      </li>
+      <li style="font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; color: var(--muted);">
+        <span style="color: var(--forest); font-size: 1rem;">✓</span> Real-time order status and delivery tracking
+      </li>
+      <li style="font-size: 0.88rem; display: flex; align-items: center; gap: 0.6rem; color: var(--muted);">
+        <span style="color: var(--forest); font-size: 1rem;">✓</span> Downloadable invoices and account statements
+      </li>
+    </ul>
+    <a href="#cta" class="btn-primary">Request a Walkthrough</a>
+  </div>
+
+  <div class="portal-mock">
+    <div style="display: flex; min-height: 400px;">
+      <div class="portal-sidebar">
+        <div class="sidebar-logo">JJ's Paper<span>.</span></div>
+        <div class="sidebar-item active">📦 Place Order</div>
+        <div class="sidebar-item">📋 My Orders</div>
+        <div class="sidebar-item">📚 Product Catalog</div>
+        <div class="sidebar-item">💰 Invoices</div>
+        <div class="sidebar-item">🔔 Notifications</div>
+        <div class="sidebar-item" style="margin-top: auto; padding-top: 2rem;">⚙️ Account</div>
+      </div>
+      <div class="portal-content-area">
+        <div class="portal-heading">Place a New Order</div>
+        <div class="order-form">
+          <div class="form-row">
+            <div class="form-field">
+              <label>Product Type</label>
+              <select>
+                <option>Uncoated Offset</option>
+                <option>Coated Gloss</option>
+                <option>Premium Writing</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Grade / Finish</label>
+              <select>
+                <option>60 lb Text</option>
+                <option>80 lb Text</option>
+                <option>24 lb Bond</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Quantity (Cartons)</label>
+              <input type="number" value="20" min="1">
+            </div>
+            <div class="form-field">
+              <label>Sheet Size</label>
+              <select>
+                <option>8.5 × 11</option>
+                <option>11 × 17</option>
+                <option>18 × 12</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Delivery Address</label>
+            <input type="text" value="412 Commerce Blvd, Suite 3">
+          </div>
+          <button class="form-submit">Submit Order →</button>
+        </div>
+
+        <div class="mini-orders">
+          <div style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem;">Recent Orders</div>
+          <div class="mini-order-row">
+            <span>#4421 — Offset 60lb (15 ct.)</span>
+            <span class="order-status status-shipped">Shipped</span>
+          </div>
+          <div class="mini-order-row">
+            <span>#4420 — Gloss Cover 80lb (8 ct.)</span>
+            <span class="order-status status-processing">Processing</span>
+          </div>
+          <div class="mini-order-row">
+            <span>#4419 — Bond 24lb (30 ct.)</span>
+            <span class="order-status status-pending">Pending</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIAL -->
+<div class="testimonial-section">
+  <div class="section-label" style="justify-content: center;">
+    <span style="width: 1.5rem; height: 1px; background: var(--gold); display: inline-block;"></span>
+    What Distributors Are Saying
+  </div>
+  <blockquote>
+    "Within 60 days of launching the customer portal, our inside sales team was handling 40% fewer routine order emails. 
+    The customers adapted faster than we expected — they didn't want to call us. They wanted to just log in and order."
+  </blockquote>
+  <cite>— VP of Sales, Regional Paper Merchant (Mid-Atlantic)</cite>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="section-label">Ready to Move Forward</div>
+  <h2>Let's show you what<br>JJ's Paper looks like<br>fully modernized.</h2>
+  <p>
+    We'll map your current catalog, sketch your customer portal, and walk through exactly how 
+    your ordering process gets transformed — no commitment, no pressure.
+  </p>
+  <div class="cta-actions">
+    <a href="mailto:hello@tidelinestrategies.com" class="btn-light">Book a Free Discovery Call</a>
+    <a href="#features" class="btn-outline">Review the Features</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Tideline Strategies<span>.</span></div>
+  <span>Prepared exclusively for JJ's Paper Company — Confidential</span>
+  <span>© 2026 Tideline Strategies</span>
+</footer>
+
+<script>
+  // Scroll-triggered reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, entry.target.dataset.delay || 0);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.pain-item').forEach((el, i) => {
+    el.dataset.delay = i * 100;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.feature-card').forEach((el, i) => {
+    el.dataset.delay = i * 80;
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('.step').forEach((el, i) => {
+    el.dataset.delay = i * 120;
+    observer.observe(el);
+  });
+
+  // Smooth scroll for nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Animated number counters
+  const counters = document.querySelectorAll('.stat-num');
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '0';
+        setTimeout(() => {
+          entry.target.style.transition = 'opacity 0.5s';
+          entry.target.style.opacity = '1';
+        }, 100);
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  counters.forEach(c => counterObserver.observe(c));
+</script>
+
+</body>
+</html>
